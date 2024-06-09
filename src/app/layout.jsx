@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
         <div id="stars2"></div>
         <div id="stars3"></div>
         <div id="title"></div>
-        {children}
+        <div className="h-screen w-screen overflow-hidden">{children}</div>
       </body>
     </html>
   );
