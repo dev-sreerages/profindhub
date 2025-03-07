@@ -10,28 +10,40 @@ const page = () => {
   const [jobsData, setJobsData] = useState([]);
   const [jobsFilteredData, setJobsFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [jobListData, setJobListData] = useState([]);
+  const [searchValue, setSearchValue] = useState(" ");
+  const [datePosted, setDatePosted] = useState("all");
+
+  const total_pages = 5;
+  const jobpost_duration = ["anytime", "today", "3days", "week", "month"];
 
   const getJobListing = async () => {
+    setLoading(true);
     const payload = {
       method: "GET",
       url: "https://jsearch.p.rapidapi.com/search",
       params: {
-        query: "developer jobs",
-        page: "1",
-        num_pages: "1",
+        query: searchValue || " ",
+        page: 5,
+        num_pages: 5,
         country: "in",
-        date_posted: "all",
+        date_posted: datePosted || "all",
       },
       headers: {
         "x-rapidapi-key": process.env.NEXT_PUBLIC_JOB_API_KEY,
-        "x-rapidapi-host": "jsearch.p.rapidapi.com",
+        "x-rapidapi-host": process.env.NEXT_PUBLIC_API_HOST,
       },
     };
     try {
       const response = await axios.request(payload);
-      console.log(response);
+      setJobListData(response.data);
+      setLoading(false);
     } catch (error) {
+      setJobListData([]);
       console.error(error.message);
+      setLoading(false);
     }
   };
 

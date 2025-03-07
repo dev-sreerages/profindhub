@@ -23,7 +23,9 @@ export default function RootLayout({ children }) {
         <div id="stars3"></div>
         <div id="title"></div>
         <ReduxProvider>
-          <div className="h-screen w-screen overflow-hidden">{children}</div>
+          <div className="h-screen w-screen overflow-hidden mt-[-5px]">
+            {children}
+          </div>
         </ReduxProvider>
       </body>
     </html>
