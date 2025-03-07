@@ -2,6 +2,7 @@
 
 import jobList from "@/data/db";
 import { Icon } from "@iconify/react";
+import axios from "axios";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -10,7 +11,32 @@ const page = () => {
   const [jobsFilteredData, setJobsFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const getJobListing = async () => {
+    const payload = {
+      method: "GET",
+      url: "https://jsearch.p.rapidapi.com/search",
+      params: {
+        query: "developer jobs",
+        page: "1",
+        num_pages: "1",
+        country: "in",
+        date_posted: "all",
+      },
+      headers: {
+        "x-rapidapi-key": process.env.NEXT_PUBLIC_JOB_API_KEY,
+        "x-rapidapi-host": "jsearch.p.rapidapi.com",
+      },
+    };
+    try {
+      const response = await axios.request(payload);
+      console.log(response);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   useEffect(() => {
+    getJobListing();
     setJobsData(jobList);
     setJobsFilteredData(jobList);
   }, []);
@@ -18,6 +44,7 @@ const page = () => {
   useEffect(() => {
     setLoading(false);
   }, [jobsFilteredData.length]);
+
   function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
       (
@@ -46,11 +73,11 @@ const page = () => {
   };
 
   return (
-    <div className="w-screen h-screen backdrop-blur-sm p-5 overflow-y-auto no-scrollbar">
+    <div className="max-w-[800px] mx-auto h-screen backdrop-blur-sm p-5 !mt-[-6px] overflow-y-auto no-scrollbar">
       <div className="h-[190px] overflow-hidden">
         <div className="flex justify-between items-center pb-5">
           <Link href={"/"} legacyBehavior>
-            <a className="text-zinc-500 hover:text-zinc-300 fade-in">
+            <a className="text-zinc-300 hover:text-zinc-200 fade-in">
               <Icon icon="solar:arrow-left-line-duotone" className="w-7 h-7" />
             </a>
           </Link>
@@ -60,7 +87,7 @@ const page = () => {
             </a>
           </Link>
         </div>
-        <p className="text-zinc-300 font-semibold text-2xl fade-in mb-5">
+        <p className="text-white font-semibold text-2xl fade-in mb-5">
           Explore Jobs
         </p>
         <input
@@ -73,7 +100,7 @@ const page = () => {
           name=""
           id=""
         />
-        <p className="mb-5 text-zinc-500 text-[10px] fade-in">
+        <p className="mb-5 text-zinc-300 text-[12px] fade-in">
           Searchable Content : Title, Role, Company Name, Location
         </p>
       </div>
@@ -93,19 +120,19 @@ const page = () => {
                 <p className="text-zinc-500">No Jobs Found</p>
               </div>
             ) : (
-              <div className="grid grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 pb-10">
+              <div className="grid grid-cols-1 gap-4 pb-10">
                 {jobsFilteredData.map((job) => (
                   <Link href={"/projects/planetfall"}>
-                    <article className="p-4 md:p-8 border border-zinc-800 bg-[#050505]/50 rounded-2xl fade-in">
-                      <div class="flex justify-between gap-2 items-center">
-                        <span class="text-xs duration-1000 text-zinc-200 group-hover:text-white group-hover:border-zinc-200 drop-shadow-orange">
+                    <article className="p-4 md:p-8 border border-zinc-400 bg-[#050505]/50 rounded-2xl fade-in">
+                      <div className="flex justify-between gap-2 items-center">
+                        <span className="text-xs duration-1000 text-zinc-200 group-hover:text-white group-hover:border-zinc-200 drop-shadow-orange">
                           {job.date}
                         </span>
-                        <span class="text-zinc-500 text-xs  flex items-center gap-1">
+                        <span className="text-zinc-500 text-xs  flex items-center gap-1">
                           &#8377; {job.salary}
                         </span>
                       </div>
-                      <h2 class="z-20 text-xl font-medium duration-1000 lg:text-3xl text-zinc-200 group-hover:text-white font-display text-nowrap overflow-hidden text-ellipsis">
+                      <h2 className="z-20 text-xl font-medium duration-1000 lg:text-3xl text-zinc-200 group-hover:text-white font-display text-nowrap overflow-hidden text-ellipsis">
                         {job.title}
                       </h2>
                       <div className="mt-4">

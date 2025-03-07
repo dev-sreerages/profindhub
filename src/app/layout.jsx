@@ -1,5 +1,7 @@
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { store } from "../store/store";
+import ReduxProvider from "./components/ReduxProvider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -21,7 +23,9 @@ export default function RootLayout({ children }) {
         <div id="stars2"></div>
         <div id="stars3"></div>
         <div id="title"></div>
-        <div className="h-screen w-screen overflow-hidden">{children}</div>
+        <ReduxProvider store={store}>
+          <div className="h-screen w-screen overflow-hidden">{children}</div>
+        </ReduxProvider>
       </body>
     </html>
   );
