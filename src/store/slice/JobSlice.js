@@ -1,18 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const GetJobListing = createAsyncThunk(
-  ("JOB/GetJobListing",
-  async (payload, rejectWithValue) => {
+  "JOB/GetJobListing",
+  async (payload, { rejectWithValue }) => {
     try {
       console.log("API Call Happened");
     } catch (error) {
       rejectWithValue(error.response.data);
     }
-  })
+  }
 );
 
 const JobSlice = createSlice({
-  name: "JOBS",
+  name: "JOB",
   initialState: {
     jobs: [],
     update: false,
@@ -30,20 +30,18 @@ const JobSlice = createSlice({
       state.error = null;
     },
   },
-  extraReducers: {
-    builder: () => {
-      builder
-        .addCase(GetJobListing.pending, (state, action) => {
-          state.loading = true;
-        })
-        .addCase(GetJobListing.fulfilled, (state, action) => {
-          state.update = true;
-          state.jobs = [];
-        })
-        .addCase(GetJobListing.rejected, (state, action) => {
-          state.error = action.payload.data;
-        });
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(GetJobListing.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(GetJobListing.fulfilled, (state, action) => {
+        state.update = true;
+        state.jobs = [];
+      })
+      .addCase(GetJobListing.rejected, (state, action) => {
+        state.error = action.payload.data;
+      });
   },
 });
 
